@@ -7,6 +7,15 @@ class m_warna extends CI_Model
         return $this->db->get('warna')->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idWarna)+1 AS idWarna");
+        $this->db->from("warna");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

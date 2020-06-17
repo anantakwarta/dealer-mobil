@@ -10,6 +10,15 @@ class m_servis extends CI_Model
         return $this->db->get('servis')->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idServis)+1 AS idServis");
+        $this->db->from("servis");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

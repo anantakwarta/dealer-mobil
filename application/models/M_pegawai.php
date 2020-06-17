@@ -12,6 +12,15 @@ class M_pegawai extends CI_Model
         return $query->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idPegawai)+1 AS idPegawai");
+        $this->db->from("pegawai");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

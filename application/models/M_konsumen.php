@@ -14,6 +14,15 @@ class m_konsumen extends CI_Model
         return $query->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idKons)+1 AS idKons");
+        $this->db->from("konsumen");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

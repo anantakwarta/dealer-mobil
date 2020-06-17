@@ -12,6 +12,15 @@ class m_mobil extends CI_Model
         return $query->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idMobil)+1 AS idMobil");
+        $this->db->from("mobil");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

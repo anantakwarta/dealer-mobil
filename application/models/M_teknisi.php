@@ -11,6 +11,15 @@ class m_teknisi extends CI_Model
         return $query->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idTeknisi)+1 AS idTeknisi");
+        $this->db->from("teknisi");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

@@ -7,6 +7,15 @@ class m_merk extends CI_Model
         return $this->db->get('merk')->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idMerk)+1 AS idMerk");
+        $this->db->from("merk");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

@@ -7,6 +7,15 @@ class m_part extends CI_Model
         return $this->db->get('part')->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idPart)+1 AS idPart");
+        $this->db->from("part");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

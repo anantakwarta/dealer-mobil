@@ -7,6 +7,15 @@ class m_coteknisi extends CI_Model
         return $this->db->get('coteknisi')->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idCoTeknisi)+1 AS idCoTeknisi");
+        $this->db->from("coteknisi");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(

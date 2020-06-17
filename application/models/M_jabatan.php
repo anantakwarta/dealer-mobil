@@ -7,6 +7,15 @@ class m_jabatan extends CI_Model
         return $this->db->get('jabatan')->result_array();
     }
 
+    public function autoId()
+    {
+        $this->db->select("MAX(idJabatan)+1 AS idJabatan");
+        $this->db->from("jabatan");
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function tambahData()
     {
         $data = array(
