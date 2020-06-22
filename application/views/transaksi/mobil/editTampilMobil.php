@@ -11,7 +11,6 @@
           	<div class="row">
           		<?php foreach ($mobil as $m) { ?>
 
-           		<!-- Earnings (Monthly) Card Example -->
            		<div class="col-xl-3 col-md-6 mb-4">
            			<a href="<?= base_url(); ?>transaksi/ubah?id=<?= $get; ?>&idMobil=<?= $m['idMobil']; ?>">
            			<div class="card border-left-primary shadow h-100 py-2">

@@ -9,6 +9,19 @@ class M_transaksi extends CI_Model {
 		
 	}
 
+    public function getByKons($id)
+    {
+        $this->db->select('*');
+        $this->db->from('transaksi');
+        $this->db->join('pegawai', 'pegawai.idPegawai=transaksi.idPegawai');
+        $this->db->join('konsumen', 'konsumen.idKons=transaksi.idKons');
+        $this->db->join('mobil', 'mobil.idMobil=transaksi.idMobil');
+        $this->db->join('merk', 'merk.idMerk = mobil.idMerk');
+        $this->db->where('transaksi.idKons', $id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
 	public function autoId()
 	{
 		$this->db->select("MAX(idTransaksi)+1 AS idTransaksi");
@@ -33,7 +46,7 @@ class M_transaksi extends CI_Model {
 		$data = array(
             "idTransaksi" => $this->input->post('id', true),
             "tanggal" => $now,
-            "idPegawai" => $this->input->post('idPegawai', true),
+            "idPegawai" => 1022,
             "idKons" => $this->input->post('idKons', true),
             "idMobil" => $this->input->post('idMobil', true)
         );

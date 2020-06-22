@@ -13,6 +13,7 @@
                     <form action="" method="post">
                         <input type="hidden" name="id" value="<?= $lastId->{'idTransaksi'};?>">
                         <input type="hidden" name="idMobil" value="<?= $mobil['idMobil'];?>">
+                        <input type="hidden" name="idKons" value="<?= $get;?>">
                         <div class="form-group">
                             <label for="model">Model</label>
                             <input type="text" class="form-control" value="<?= $mobil['namaMerk'];?> <?= $mobil['model'];?>" readonly="">
@@ -29,23 +30,7 @@
                             <label for="warna">harga</label>
                             <input type="text" class="form-control" value="<?= $mobil['harga'];?>" readonly="">
                         </div>
-                        <div class="form-group">
-                            <label for="idPegawai">Pegawai</label>
-                            <select class="form-control" id="idPegawai" name="idPegawai">
-                                <?php foreach ($pegawai as $p) : ?>
-                                    <option value="<?= $p['idPegawai']; ?>"><?= $p['namaPegawai']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="idKonsumen">Konsumen</label>
-                            <select class="form-control" id="idKons" name="idKons">
-                                <?php foreach ($konsumen as $k) : ?>
-                                    <option value="<?= $k['idKons']; ?>"><?= $k['namaKons']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <button type="submit" name="tambah" class="btn btn-primary float-right mt-1">Tambah Data</button>
+                        <button type="submit" name="tambah" class="btn btn-primary float-right mt-1" onclick="return confirm('Apakah Anda yakin mobil <?= $mobil['namaMerk'];?> <?= $mobil['model'];?>')">Beli</button>
                     </form>
 
                 </div>

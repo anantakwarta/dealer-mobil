@@ -7,21 +7,34 @@ class Transaksi extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
         $this->load->model('m_transaksi');
+        $this->load->model('m_konsumen');
+        $this->load->model('m_mobil');
         $this->load->library('form_validation');
 	}
 
 	public function index()
+	{
+		$data['judul'] = 'Pilih Konsumen';
+		$data['konsumen'] = $this->m_konsumen->getAll();
+		$this->load->view('templates/header', $data);
+		$this->load->view('transaksi/mobil/index', $data);
+		$this->load->view('templates/footer');
+	}
+
+	public function tampil()
     {
         $data['judul'] = 'Data Transaksi';
-        $data['transaksi'] = $this->m_transaksi->getAll();
+        $data['get'] = $this->input->get('id', true);
+        $data['transaksi'] = $this->m_transaksi->getByKons($data['get']);
         $this->load->view('templates/header', $data);
-        $this->load->view('transaksi/mobil/index', $data);
+        $this->load->view('transaksi/mobil/tampil', $data);
         $this->load->view('templates/footer');
     }
 
 	public function tampilMerk()
 	{
 		$data['judul'] = 'Transaksi Mobil';
+		$data['get'] = $this->input->get('id', true);
         $data['merk'] = $this->db->get('merk')->result_array();
         $this->load->view('templates/header', $data);
         $this->load->view('transaksi/mobil/tampilMerk', $data);
@@ -30,29 +43,26 @@ class Transaksi extends CI_Controller {
 
 	public function tampilMobil($id)
 	{
-		$this->db->select('*')
-            ->from('mobil')
-            ->join('warna', 'warna.idWarna=mobil.idWarna');
-        $this->db->where('idMerk', $id);
-        $query = $this->db->get()->result_array();
-
 		$data['judul'] = 'Transaksi Mobil';
-		$data['mobil'] = $query;
+		$data['mobil'] = $this->m_mobil->getAll();
+		$data['get'] = $this->input->get('id', true);
 		$data['merk'] = $this->db->get_where('merk', ['idMerk' => $id])->result_array();
+
 		$this->load->view('templates/header', $data);
 		$this->load->view('transaksi/mobil/tampilMobil', $data);
 		$this->load->view('templates/footer');
 	}
 
-	public function tambah($id)
+	public function tambah()
 	{
 		$this->load->model('m_mobil');
 		$data['judul'] = 'Form Transaksi';
 
 		$data['lastId'] = $this->m_transaksi->autoId();
+		$data['get'] = $this->input->get('id', true);
         $data['konsumen'] = $this->db->get('konsumen')->result_array();
         $data['pegawai'] = $this->db->get('pegawai')->result_array();
-        $data['mobil'] = $this->m_mobil->getById($id);
+        $data['mobil'] = $this->m_mobil->getById($this->input->get('idMobil', true));
         
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
 

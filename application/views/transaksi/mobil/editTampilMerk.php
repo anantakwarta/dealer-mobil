@@ -10,7 +10,6 @@
           <?php foreach ($merk as $m) {
             ?>
 
-            <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
             <a href="<?= base_url(); ?>transaksi/editTampilMobil/<?= $m['idMerk']; ?>?id=<?= $get; ?>">
               <div class="card border-left-primary shadow h-100 py-2">
