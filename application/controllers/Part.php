@@ -24,6 +24,7 @@ class Part extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Part';
+        $data['lastId'] = $this->m_part->autoId();
 
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('part', 'part', 'required');

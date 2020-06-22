@@ -22,7 +22,9 @@ class Pegawai extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Pegawai';
+        $data['lastId'] = $this->m_pegawai->autoId();
         $data['jabatan'] = $this->db->get('jabatan')->result_array();
+
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('username', 'Username', 'required');

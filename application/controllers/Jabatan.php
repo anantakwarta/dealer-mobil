@@ -22,6 +22,7 @@ class Jabatan extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Jabatan';
+        $data['lastId'] = $this->m_jabatan->autoId();
 
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');

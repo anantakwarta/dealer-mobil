@@ -22,6 +22,7 @@ class Merk extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Merk';
+        $data['lastId'] = $this->m_merk->autoId();
 
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('merk', 'Merk', 'required');

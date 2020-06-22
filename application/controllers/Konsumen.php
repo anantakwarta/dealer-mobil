@@ -24,6 +24,8 @@ class Konsumen extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Konsumen';
+        $data['lastId'] = $this->m_konsumen->autoId();
+
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('username', 'Username', 'required');

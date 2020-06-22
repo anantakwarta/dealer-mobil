@@ -22,6 +22,8 @@ class Coteknisi extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Teknisi Pembantu';
+        $data['lastId'] = $this->m_coteknisi->autoId();
+        
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         if ($this->form_validation->run() == FALSE) {

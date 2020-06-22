@@ -24,6 +24,7 @@ class Servis extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Servis';
+        $data['lastId'] = $this->m_servis->autoId();
 
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('servis', 'servis', 'required');

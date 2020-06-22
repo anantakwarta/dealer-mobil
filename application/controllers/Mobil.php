@@ -21,14 +21,16 @@ class Mobil extends CI_Controller
 
     public function tambah()
     {
+        $data['judul'] = 'Form Tambah Data Mobil';
+        $data['lastId'] = $this->m_mobil->autoId();
         $tahun = array();
         for ($i = 2020; $i >= 1980; $i--) {
             $tahun[] = array('tahun' => $i);
         }
         $data['tahun'] = $tahun;
-        $data['judul'] = 'Form Tambah Data Mobil';
         $data['merk'] = $this->db->get('merk')->result_array();
         $data['warna'] = $this->db->get('warna')->result_array();
+
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('model', 'Model', 'required');
         $this->form_validation->set_rules('tahun', 'Tahun', 'required|numeric');

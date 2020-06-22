@@ -22,7 +22,9 @@ class Teknisi extends CI_Controller
     public function tambah()
     {
         $data['judul'] = 'Form Tambah Data Teknisi';
+        $data['lastId'] = $this->m_teknisi->autoId();
         $data['coteknisi'] = $this->db->get('coteknisi')->result_array();
+
         $this->form_validation->set_rules('id', 'ID', 'required|numeric');
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         if ($this->form_validation->run() == FALSE) {
