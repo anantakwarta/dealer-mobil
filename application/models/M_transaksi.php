@@ -42,7 +42,7 @@ class M_transaksi extends CI_Model {
 
 	public function tambahData()
 	{
-		$now = date('Y-m-d');
+		$now = mdate('%Y-%m-%d');
 		$data = array(
             "idTransaksi" => $this->input->post('id', true),
             "tanggal" => $now,
@@ -68,7 +68,7 @@ class M_transaksi extends CI_Model {
 
     public function ubahData()
     {
-    	$now = date('Y-m-d');
+    	$now = mdate('%Y-%m-%d');
     	$this->db->set('tanggal', $now)
             ->set('idMobil', $this->input->get('idMobil', true))
             ->where('idTransaksi', $this->input->get('id'))
