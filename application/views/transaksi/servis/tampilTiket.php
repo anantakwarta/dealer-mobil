@@ -28,7 +28,7 @@
                             <th>Servis</th>
                             <th>Part</th>
                             <th>Total (Rp)</th>
-                            <th width="180px">Aksi</th>
+                            <th width="200px">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
