@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 22, 2020 at 11:18 AM
+-- Generation Time: Jun 29, 2020 at 07:28 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -103,8 +103,20 @@ CREATE TABLE `jasaservis` (
 --
 
 INSERT INTO `jasaservis` (`idJasaServis`, `idTransaksi`, `idMobil`, `idKons`, `tanggalDiterima`, `tanggalDikembalikan`, `hargaTotal`) VALUES
-(2011, 201, 1042, 1032, '2020-05-18 06:21:58', NULL, NULL),
-(2012, 202, 1043, 1031, '2020-05-19 00:00:00', NULL, NULL);
+(2012, 202, 1043, 1031, '2020-06-24 02:06:19', NULL, 0),
+(2013, 201, 1042, 1032, '2020-06-27 11:06:40', NULL, 2500000),
+(2014, 201, 1042, 1032, '2020-06-29 08:06:09', NULL, 250000);
+
+--
+-- Triggers `jasaservis`
+--
+DELIMITER $$
+CREATE TRIGGER `hapus_tiket` BEFORE DELETE ON `jasaservis` FOR EACH ROW BEGIN
+	DELETE FROM servisteknisi WHERE servisteknisi.idJasaServis = OLD.idJasaServis;
+    DELETE FROM partdipakai WHERE partdipakai.idJasaServis = OLD.idJasaServis;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -202,7 +214,9 @@ INSERT INTO `part` (`idPart`, `namaPart`, `harga`) VALUES
 (4011, 'Ban', 575000),
 (4012, 'Velg', 4900000),
 (4013, 'Knalpot', 350000),
-(4014, 'Klakson', 195);
+(4014, 'Klakson', 195000),
+(4015, 'Kampas Rem', 30000),
+(4016, 'Filter AC', 100000);
 
 -- --------------------------------------------------------
 
@@ -222,7 +236,29 @@ CREATE TABLE `partdipakai` (
 --
 
 INSERT INTO `partdipakai` (`idPartDipakai`, `idPart`, `jumlah`, `idJasaServis`) VALUES
-(4021, 4011, 4, 2011);
+(4021, 4011, 4, 2012),
+(4022, 4011, 4, 2013),
+(4023, 4016, 2, 2014);
+
+--
+-- Triggers `partdipakai`
+--
+DELIMITER $$
+CREATE TRIGGER `hapus_part` BEFORE DELETE ON `partdipakai` FOR EACH ROW BEGIN
+	UPDATE jasaservis js, part p, transaksi t
+    SET js.hargaTotal = js.hargaTotal - (OLD.jumlah * p.harga)
+    WHERE js.idJasaServis = OLD.idJasaServis AND p.idPart = OLD.idPart AND js.idTransaksi = t.idTransaksi AND DATE_SUB(js.tanggalDiterima, INTERVAL 1 YEAR) > DATE(t.tanggal);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tambah_part` AFTER INSERT ON `partdipakai` FOR EACH ROW BEGIN
+	UPDATE jasaservis js, part p, transaksi t
+    SET js.hargaTotal = js.hargaTotal + (NEW.jumlah * p.harga)
+    WHERE js.idJasaServis = NEW.idJasaServis AND p.idPart = NEW.idPart AND js.idTransaksi = t.idTransaksi AND DATE_SUB(js.tanggalDiterima, INTERVAL 1 YEAR) > DATE(t.tanggal);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -250,34 +286,30 @@ INSERT INTO `pegawai` (`idPegawai`, `namaPegawai`, `username`, `idJabatan`, `ala
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `pendapatan`
--- (See below for the actual view)
---
-CREATE TABLE `pendapatan` (
-`totalPendapatan` decimal(43,0)
-);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `servis`
 --
 
 CREATE TABLE `servis` (
   `idServis` int(11) NOT NULL,
   `namaServis` varchar(255) NOT NULL,
-  `hargaPerJam` int(11) NOT NULL
+  `harga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `servis`
 --
 
-INSERT INTO `servis` (`idServis`, `namaServis`, `hargaPerJam`) VALUES
+INSERT INTO `servis` (`idServis`, `namaServis`, `harga`) VALUES
 (3021, 'Ganti Oli Mesin', 50000),
 (3022, 'Ganti Filter Oli', 50000),
 (3023, 'Ganti Busi', 200000),
-(3024, 'Ganti Aki', 250000);
+(3024, 'Ganti Aki', 250000),
+(3025, 'Ganti Oli Power Steering', 50000),
+(3026, 'Ganti isi air aki', 30000),
+(3027, 'Ganti Oli Rem', 30000),
+(3028, 'Gurah Mesin', 300000),
+(3029, 'Balancing dan Spooring', 200000),
+(3030, 'Tune Up', 500000);
 
 -- --------------------------------------------------------
 
@@ -289,19 +321,39 @@ CREATE TABLE `servisteknisi` (
   `idServisTeknisi` int(11) NOT NULL,
   `idJasaServis` int(11) NOT NULL,
   `idTeknisi` int(11) NOT NULL,
-  `idCoTeknisi` int(11) NOT NULL,
   `idServis` int(11) NOT NULL,
   `jamMulai` time NOT NULL,
-  `jamSelesai` time DEFAULT NULL,
-  `harga` int(11) DEFAULT NULL
+  `jamSelesai` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `servisteknisi`
 --
 
-INSERT INTO `servisteknisi` (`idServisTeknisi`, `idJasaServis`, `idTeknisi`, `idCoTeknisi`, `idServis`, `jamMulai`, `jamSelesai`, `harga`) VALUES
-(2021, 2011, 3031, 3041, 3023, '00:00:00', '01:00:00', 200000);
+INSERT INTO `servisteknisi` (`idServisTeknisi`, `idJasaServis`, `idTeknisi`, `idServis`, `jamMulai`, `jamSelesai`) VALUES
+(2021, 2012, 3031, 3025, '00:00:00', NULL),
+(2022, 2013, 3031, 3029, '00:00:00', NULL),
+(2023, 2014, 3031, 3022, '00:00:00', NULL);
+
+--
+-- Triggers `servisteknisi`
+--
+DELIMITER $$
+CREATE TRIGGER `hapus_servis` BEFORE DELETE ON `servisteknisi` FOR EACH ROW BEGIN
+	UPDATE jasaservis js, servis s, transaksi t
+    SET js.hargaTotal = js.hargaTotal - s.harga
+    WHERE js.idJasaServis = OLD.idJasaServis AND s.idServis = OLD.idServis AND js.idTransaksi = t.idTransaksi AND DATE_SUB(js.tanggalDiterima, INTERVAL 1 YEAR) > DATE(t.tanggal);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tambah_servis` BEFORE INSERT ON `servisteknisi` FOR EACH ROW BEGIN
+	UPDATE jasaservis js, servis s, transaksi t
+    SET js.hargaTotal = js.hargaTotal + s.harga
+    WHERE js.idJasaServis = NEW.idJasaServis AND s.idServis = NEW.idServis AND js.idTransaksi = t.idTransaksi AND DATE_SUB(js.tanggalDiterima, INTERVAL 1 YEAR) > DATE(t.tanggal);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -427,15 +479,6 @@ INSERT INTO `warna` (`idWarna`, `warna`) VALUES
 (35, 'Merah'),
 (36, 'Kuning'),
 (37, 'Coklat Tua');
-
--- --------------------------------------------------------
-
---
--- Structure for view `pendapatan`
---
-DROP TABLE IF EXISTS `pendapatan`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `pendapatan`  AS  select sum(`m`.`harga`) + sum(`st`.`harga`) + sum(`pd`.`jumlah` * `p`.`harga`) AS `totalPendapatan` from (((((`transaksi` `t` left join `mobil` `m` on(`m`.`idMobil` = `t`.`idMobil`)) left join `jasaservis` `js` on(`t`.`idTransaksi` = `js`.`idTransaksi`)) left join `servisteknisi` `st` on(`js`.`idJasaServis` = `st`.`idJasaServis`)) left join `partdipakai` `pd` on(`js`.`idJasaServis` = `pd`.`idJasaServis`)) left join `part` `p` on(`pd`.`idPart` = `p`.`idPart`)) ;
 
 --
 -- Indexes for dumped tables
