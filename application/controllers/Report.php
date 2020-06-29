@@ -35,11 +35,11 @@ class Report extends CI_Controller {
         $data['ket'] = $ket;
         $data['report'] = $report;
         $data['report2'] = $report2;
-        
+
 		$mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
 	    $html = $this->load->view('report/print', $data, true);
         $mpdf->WriteHTML($html);
-        $mpdf->Output();
+        $mpdf->Output('laporan'.mdate('%Y-%m-%d').'.pdf','D');
     }
 }
 
