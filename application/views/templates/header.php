@@ -106,7 +106,7 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
+            <!-- Nav Item -->
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url(); ?>konsumen">
                     <i class="fas fa-fw fa-user"></i>
@@ -134,6 +134,21 @@
                         <a class="collapse-item" href="<?= base_url(); ?>jasaServis">Jasa Servis</a>
                     </div>
                 </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Report
+            </div>
+
+            <!-- Nav Item -->
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url(); ?>report">
+                    <i class="fas fa-fw fa-info"></i>
+                    <span>Report</span></a>
             </li>
 
             <!-- Divider -->
